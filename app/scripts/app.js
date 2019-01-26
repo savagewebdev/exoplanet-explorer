@@ -37,27 +37,26 @@ Instructions:
     This code needs to get wrapped in a Promise!
      */
     return new Promise (Function(resolve, reject) {
-      
-    
       var req = new XMLHttpRequest();
       req.open('GET', url);
       req.onload = function() {
         if (req.status === 200) {
-          req.response = resolve();
+          resolve(req.response);
           // You'll want to resolve with the data from req.response
         } else {
           // It failed :(
-          req.statusText = reject(req.onerror());
+          reject(Error(req.statusText));
           // Be nice and reject with req.statusText
         }
       };
       req.onerror = function() {
         // It failed :(
-        addSearchHeader('unknown');
+        reject(Error('Network Error'));
         // Pass a 'Network Error' to reject
       };
       req.send();
     });
+  }
 
 
 
@@ -68,8 +67,13 @@ Instructions:
     You'll need to add a .then and a .catch. Pass the response to addSearchHeader on resolve or
     pass 'unknown' to addSearchHeader if it rejects.
      */
-    get('data/earth-like-results.json');
-    then(addSearchHeader(response));
-    catch(console.log(req.onerror));
+    get('https://github.com/savagewebdev/exoplanet-explorer/blob/xhr-start/app/data/earth-like-results.json')
+    .then(function(response) {
+      addSearchHeader(response);
+    });    
+    .catch(function(error) {
+      addSearchHeader('unknown');
+      console.log(error);
+    });
   });
 })(document);
