@@ -33,30 +33,41 @@ Instructions:
    * @return {Promise}    - A Promise that resolves when the XHR succeeds and fails otherwise.
    */
   function get(url) {
+    return fetch(url, {
+      method: 'get'
+    })
+  };
     /*
     This code needs to get wrapped in a Promise!
      */
-    return new Promise (Function(resolve, reject) {
-      var req = new XMLHttpRequest();
-      req.open('GET', url);
-      req.onload = function() {
-        if (req.status === 200) {
-          resolve(req.response);
-          // You'll want to resolve with the data from req.response
-        } else {
-          // It failed :(
-          reject(Error(req.statusText));
-          // Be nice and reject with req.statusText
-        }
-      };
-      req.onerror = function() {
-        // It failed :(
-        reject(Error('Network Error'));
-        // Pass a 'Network Error' to reject
-      };
-      req.send();
-    });
-  }
+    
+    function getJSON(url) {
+      return get(url).then(function(response) {
+        return response.json();
+      })
+    };
+    
+//    return new Promise (Function(resolve, reject) {
+//      var req = new XMLHttpRequest();
+//      req.open('GET', url);
+//      req.onload = function() {
+//        if (req.status === 200) {
+//          resolve(req.response);
+//          // You'll want to resolve with the data from req.response
+//        } else {
+//          // It failed :(
+//          reject(Error(req.statusText));
+//          // Be nice and reject with req.statusText
+//        }
+//      };
+//      req.onerror = function() {
+//        // It failed :(
+//        reject(Error('Network Error'));
+//        // Pass a 'Network Error' to reject
+//      };
+//      req.send();
+//    });
+//  }
 
 
 
@@ -67,9 +78,10 @@ Instructions:
     You'll need to add a .then and a .catch. Pass the response to addSearchHeader on resolve or
     pass 'unknown' to addSearchHeader if it rejects.
      */
-    get('https://github.com/savagewebdev/exoplanet-explorer/blob/xhr-start/app/data/earth-like-results.json')
+    getJSON('https://github.com/savagewebdev/exoplanet-explorer/blob/xhr-start/app/data/earth-like-results.json')
     .then(function(response) {
-      addSearchHeader(response);
+      addSearchHeader(response.query);
+      console.log(response);
     });    
     .catch(function(error) {
       addSearchHeader('unknown');
