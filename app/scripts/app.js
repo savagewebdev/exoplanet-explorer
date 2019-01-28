@@ -60,15 +60,15 @@ Instructions:
   window.addEventListener('WebComponentsReady', function() {
     home = document.querySelector('section[data-route="home"]');
     getJSON('https://github.com/savagewebdev/exoplanet-explorer/blob/xhr-start/app/data/earth-like-results.json');
-    .then(function(response) { // Following the JSON response promise ...
+    window.then(function(response) { // Following the JSON response promise ...
       addSearchHeader(response.query); // Familiar portion. Adding of the search header. 
       return getJSON(response.results[0]); // Returns the second getJSON. Gets the url of the first planet.
-      )}
-    .catch(function() { // First catch is in case there is an error with the search results.
+      )};
+    window.catch(function() { // First catch is in case there is an error with the search results.
       throw error('Search Request Error');
-      })
-    .then(createPlanetThumb); // By returning the second getJSON, it gets passed to this .then().
-    .catch(function(e) { // Second catch is in case there is anything else that goes wrong.
+      });
+   window.then(createPlanetThumb); // By returning the second getJSON, it gets passed to this .then().
+    window.catch(function(e) { // Second catch is in case there is anything else that goes wrong.
       addSearchHeader('Unknown');
       console.log(e);
     });
